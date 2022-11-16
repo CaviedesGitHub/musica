@@ -3,9 +3,13 @@ package com.miso.musica.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.miso.musica.ui.AlbumsFragmentDirections
 import com.miso.musica.R
 import com.miso.musica.databinding.AlbumItemBinding
@@ -32,6 +36,7 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>(){
         holder.viewDataBinding.also {
             it.album = albums[position]
         }
+        holder.bind(albums[position])
         holder.viewDataBinding.root.setOnClickListener {
             val action = AlbumsFragmentDirections.actionAlbumsFragmentToCommentsFragment(albums[position].albumId)
             // Navigate using that action
@@ -43,14 +48,21 @@ class AlbumsAdapter : RecyclerView.Adapter<AlbumsAdapter.AlbumViewHolder>(){
         return albums.size
     }
 
-
     class AlbumViewHolder(val viewDataBinding: AlbumItemBinding) :
         RecyclerView.ViewHolder(viewDataBinding.root) {
         companion object {
             @LayoutRes
             val LAYOUT = R.layout.album_item
         }
+        fun bind(album: Album) {
+            Glide.with(itemView)
+                .load(album.cover.toUri().buildUpon().scheme("https").build())
+                .apply(
+                    RequestOptions()
+                    .placeholder(R.drawable.loading_animation)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .error(R.drawable.ic_broken_image))
+                .into(viewDataBinding.albumCover)
+        }
     }
-
-
 }
