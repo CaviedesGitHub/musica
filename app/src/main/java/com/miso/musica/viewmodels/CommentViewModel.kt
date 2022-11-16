@@ -1,11 +1,14 @@
 package com.miso.musica.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.miso.musica.models.Comment
 import com.miso.musica.network.NetworkServiceAdapter
+import com.miso.musica.repositories.CommentsRepository
 
 class CommentViewModel(application: Application, albumId: Int) :  AndroidViewModel(application) {
+    private val commentsRepository = CommentsRepository(application)
 
     private val _comments = MutableLiveData<List<Comment>>()
     val comments: LiveData<List<Comment>>
@@ -27,11 +30,12 @@ class CommentViewModel(application: Application, albumId: Int) :  AndroidViewMod
     }
 
     private fun refreshDataFromNetwork() {
-        NetworkServiceAdapter.getInstance(getApplication()).getComments(id, {
+        commentsRepository.refreshData(id, {
             _comments.postValue(it)
             _eventNetworkError.value = false
             _isNetworkErrorShown.value = false
         },{
+            Log.d("Error", it.toString())
             _eventNetworkError.value = true
         })
     }

@@ -4,8 +4,10 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.miso.musica.models.Album
 import com.miso.musica.network.NetworkServiceAdapter
+import com.miso.musica.repositories.AlbumsRepository
 
 class AlbumViewModel(application: Application) :  AndroidViewModel(application) {
+    private val albumsRepository = AlbumsRepository(application)
 
     private val _albums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>>
@@ -25,7 +27,7 @@ class AlbumViewModel(application: Application) :  AndroidViewModel(application) 
     }
 
     private fun refreshDataFromNetwork() {
-        NetworkServiceAdapter.getInstance(getApplication()).getAlbums({
+        albumsRepository.refreshData({
             _albums.postValue(it)
             _eventNetworkError.value = false
             _isNetworkErrorShown.value = false

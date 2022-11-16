@@ -1,11 +1,14 @@
 package com.miso.musica.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.miso.musica.models.Collector
 import com.miso.musica.network.NetworkServiceAdapter
+import com.miso.musica.repositories.CollectorsRepository
 
 class CollectorViewModel(application: Application) :  AndroidViewModel(application) {
+    private val collectorsRepository = CollectorsRepository(application)
 
     private val _collectors = MutableLiveData<List<Collector>>()
     val collectors: LiveData<List<Collector>>
@@ -25,11 +28,12 @@ class CollectorViewModel(application: Application) :  AndroidViewModel(applicati
     }
 
     private fun refreshDataFromNetwork() {
-        NetworkServiceAdapter.getInstance(getApplication()).getCollectors({
+        collectorsRepository.refreshData({
             _collectors.postValue(it)
             _eventNetworkError.value = false
             _isNetworkErrorShown.value = false
         },{
+            Log.d("Error", it.toString())
             _eventNetworkError.value = true
         })
     }
