@@ -8,9 +8,12 @@ plugins {
     id 'kotlin-kapt'
 }
 
+apply plugin: 'kotlin-kapt'
+
 android {
     namespace 'com.miso.musica'
     compileSdk 32
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.miso.musica"
@@ -62,4 +65,11 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
 
     implementation 'com.github.bumptech.glide:glide:4.8.0'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2"
+
+    // Room components
+    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 }

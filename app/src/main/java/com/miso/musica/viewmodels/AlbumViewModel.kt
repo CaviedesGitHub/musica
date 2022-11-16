@@ -2,6 +2,7 @@ package com.miso.musica.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.miso.musica.database.VinylRoomDatabase
 import com.miso.musica.models.Album
 import com.miso.musica.network.NetworkServiceAdapter
 import com.miso.musica.repositories.AlbumsRepository
@@ -10,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AlbumViewModel(application: Application) :  AndroidViewModel(application) {
-    private val albumsRepository = AlbumsRepository(application)
+    private val albumsRepository = AlbumsRepository(application, VinylRoomDatabase.getDatabase(application.applicationContext).albumsDao())
 
     private val _albums = MutableLiveData<List<Album>>()
     val albums: LiveData<List<Album>>

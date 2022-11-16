@@ -3,6 +3,7 @@ package com.miso.musica.viewmodels
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
+import com.miso.musica.database.VinylRoomDatabase
 import com.miso.musica.models.Comment
 import com.miso.musica.network.NetworkServiceAdapter
 import com.miso.musica.repositories.CommentsRepository
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CommentViewModel(application: Application, albumId: Int) :  AndroidViewModel(application) {
-    private val commentsRepository = CommentsRepository(application)
+    private val commentsRepository = CommentsRepository(application, VinylRoomDatabase.getDatabase(application.applicationContext).commentsDao())
 
     private val _comments = MutableLiveData<List<Comment>>()
     val comments: LiveData<List<Comment>>

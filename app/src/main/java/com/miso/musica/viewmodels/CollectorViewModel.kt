@@ -3,6 +3,7 @@ package com.miso.musica.viewmodels
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
+import com.miso.musica.database.VinylRoomDatabase
 import com.miso.musica.models.Collector
 import com.miso.musica.network.NetworkServiceAdapter
 import com.miso.musica.repositories.CollectorsRepository
@@ -12,7 +13,7 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class CollectorViewModel(application: Application) :  AndroidViewModel(application) {
-    private val collectorsRepository = CollectorsRepository(application)
+    private val collectorsRepository = CollectorsRepository(application, VinylRoomDatabase.getDatabase(application.applicationContext).collectorsDao())
 
     private val _collectors = MutableLiveData<List<Collector>>()
     val collectors: LiveData<List<Collector>>
