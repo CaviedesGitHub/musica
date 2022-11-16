@@ -6,6 +6,9 @@ import androidx.lifecycle.*
 import com.miso.musica.models.Comment
 import com.miso.musica.network.NetworkServiceAdapter
 import com.miso.musica.repositories.CommentsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CommentViewModel(application: Application, albumId: Int) :  AndroidViewModel(application) {
     private val commentsRepository = CommentsRepository(application)
@@ -30,14 +33,19 @@ class CommentViewModel(application: Application, albumId: Int) :  AndroidViewMod
     }
 
     private fun refreshDataFromNetwork() {
-        commentsRepository.refreshData(id, {
-            _comments.postValue(it)
-            _eventNetworkError.value = false
-            _isNetworkErrorShown.value = false
-        },{
-            Log.d("Error", it.toString())
+        try {
+            viewModelScope.launch (Dispatchers.Default){
+                withContext(Dispatchers.IO){
+                    var data = commentsRepository.refreshData(id)
+                    _comments.postValue(data)
+                }
+                _eventNetworkError.postValue(false)
+                _isNetworkErrorShown.postValue(false)
+            }
+        }
+        catch (e:Exception){
             _eventNetworkError.value = true
-        })
+        }
     }
 
     fun onNetworkErrorShown() {
