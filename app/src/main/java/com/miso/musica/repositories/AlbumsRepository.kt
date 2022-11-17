@@ -17,8 +17,7 @@ class AlbumsRepository (val application: Application, private val albumsDao: Alb
         return if(cached.isNullOrEmpty()){
             Log.d("AlbumRepository","Cache Vacio")
             val cm = application.baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            Log.d("AlbumRepository","Despues de cm")
-            if(false){ //( cm.activeNetworkInfo?.type != ConnectivityManager.TYPE_WIFI && cm.activeNetworkInfo?.type != ConnectivityManager.TYPE_MOBILE){
+            if(cm.activeNetworkInfo?.type != ConnectivityManager.TYPE_WIFI && cm.activeNetworkInfo?.type != ConnectivityManager.TYPE_MOBILE){
                 emptyList()
             } else NetworkServiceAdapter.getInstance(application).getAlbums()
         } else cached

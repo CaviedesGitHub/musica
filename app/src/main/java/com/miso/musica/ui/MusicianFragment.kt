@@ -1,7 +1,6 @@
 package com.miso.musica.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,18 +8,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.miso.musica.R
-import com.miso.musica.databinding.FragmentCommentsBinding
-import com.miso.musica.databinding.FragmentAlbumsOfCollectorBinding
-import com.miso.musica.models.CollectorAlbum
-import com.miso.musica.models.Comment
-import com.miso.musica.ui.adapters.CollectorAlbumAdapter
-import com.miso.musica.ui.adapters.CommentsAdapter
-import com.miso.musica.viewmodels.CollectorAlbumViewModel
-import com.miso.musica.viewmodels.CommentViewModel
+import com.miso.musica.databinding.FragmentCollectorsBinding
+import com.miso.musica.databinding.FragmentMusicianBinding
+import com.miso.musica.models.Collector
+import com.miso.musica.models.Musician
+import com.miso.musica.ui.adapters.CollectorsAdapter
+import com.miso.musica.ui.adapters.MusiciansAdapter
+import com.miso.musica.viewmodels.CollectorViewModel
+import com.miso.musica.viewmodels.MusicianViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,15 +27,15 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [AlbumsOfCollectorFragment.newInstance] factory method to
+ * Use the [MusicianFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AlbumsOfCollectorFragment : Fragment() {
-    private var _binding: FragmentAlbumsOfCollectorBinding? = null
+class MusicianFragment : Fragment() {
+    private var _binding: FragmentMusicianBinding? = null
     private val binding get() = _binding!!
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewModel: CollectorAlbumViewModel
-    private var viewModelAdapter: CollectorAlbumAdapter? = null
+    private lateinit var viewModel: MusicianViewModel
+    private var viewModelAdapter: MusiciansAdapter? = null
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -55,14 +53,14 @@ class AlbumsOfCollectorFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAlbumsOfCollectorBinding.inflate(inflater, container, false)
+        _binding = FragmentMusicianBinding.inflate(inflater, container, false)
         val view = binding.root
-        viewModelAdapter = CollectorAlbumAdapter()
+        viewModelAdapter = MusiciansAdapter()
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        recyclerView = binding.colalbumrv
+        recyclerView = binding.musiciansRv
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = viewModelAdapter
     }
@@ -72,13 +70,12 @@ class AlbumsOfCollectorFragment : Fragment() {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        activity.actionBar?.title = getString(R.string.title_comments)
-        val args: AlbumsOfCollectorFragmentArgs by navArgs()
-        Log.d("Args", args.idCollector.toString())
-        viewModel = ViewModelProvider(this, CollectorAlbumViewModel.Factory(activity.application, args.idCollector)).get(CollectorAlbumViewModel::class.java)
-        viewModel.collectorAlbums.observe(viewLifecycleOwner, Observer<List<CollectorAlbum>> {
+        activity.actionBar?.title = getString(R.string.tituMusicos)
+        viewModel = ViewModelProvider(this, MusicianViewModel.Factory(activity.application)).get(
+            MusicianViewModel::class.java)
+        viewModel.musicians.observe(viewLifecycleOwner, Observer<List<Musician>> {
             it.apply {
-                viewModelAdapter!!.albumscollector  = this
+                viewModelAdapter!!.musicians = this
             }
         })
         viewModel.eventNetworkError.observe(viewLifecycleOwner, Observer<Boolean> { isNetworkError ->
@@ -104,12 +101,12 @@ class AlbumsOfCollectorFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment AlbumsOfCollectorFragment.
+         * @return A new instance of fragment MusicianFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            AlbumsOfCollectorFragment().apply {
+            MusicianFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

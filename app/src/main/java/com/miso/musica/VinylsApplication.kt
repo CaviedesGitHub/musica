@@ -6,3 +6,5 @@ import com.miso.musica.database.VinylRoomDatabase
 class VinylsApplication: Application()  {
     val database by lazy { VinylRoomDatabase.getDatabase(this) }
 }
+
+//android:name="com.miso.musica.VinylsApplication"

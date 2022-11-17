@@ -5,11 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil.setContentView
-import androidx.navigation.findNavController
 import com.miso.musica.R
-import com.miso.musica.databinding.ActivityMainBinding
-import com.miso.musica.databinding.FragmentVinylosBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,11 +14,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [VinylosFragment.newInstance] factory method to
+ * Use the [MusicianDetailFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class VinylosFragment : Fragment() {
-    lateinit var binding: FragmentVinylosBinding
+class MusicianDetailFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -40,28 +35,9 @@ class VinylosFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentVinylosBinding.inflate(inflater)
-        return binding.root
-        //return inflater.inflate(R.layout.fragment_vinylos, container, false)
+        return inflater.inflate(R.layout.fragment_musician_detail, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.btnCollectors.setOnClickListener {
-            val action = VinylosFragmentDirections.actionVinylosFragmentToCollectorsFragment()
-            view.findNavController().navigate(action)
-        }
-
-        binding.btnAlbums.setOnClickListener {
-            val action = VinylosFragmentDirections.actionVinylosFragmentToAlbumsFragment()
-            view.findNavController().navigate(action)
-        }
-
-        binding.btnMusicos.setOnClickListener {
-            val action = VinylosFragmentDirections.actionVinylosFragmentToMusicianFragment()
-            view.findNavController().navigate(action)
-        }
-    }
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -69,12 +45,12 @@ class VinylosFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment VinylosFragment.
+         * @return A new instance of fragment MusicianDetailFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            VinylosFragment().apply {
+            MusicianDetailFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

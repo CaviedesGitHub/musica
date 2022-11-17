@@ -1,5 +1,7 @@
 package com.miso.musica.models
 
+import androidx.annotation.NonNull
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -13,3 +15,4 @@ data class Album (
     val genre:String,
     val recordLabel:String
 )
+

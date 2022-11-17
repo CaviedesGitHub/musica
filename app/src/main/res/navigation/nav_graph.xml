@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_vinylosFragment_to_albumsFragment"
             app:destination="@id/albumsFragment" />
+        <action
+            android:id="@+id/action_vinylosFragment_to_musicianFragment"
+            app:destination="@id/musicianFragment" />
     </fragment>
     <fragment
         android:id="@+id/albumsFragment"
@@ -51,6 +54,24 @@
         tools:layout="@layout/fragment_albums_of_collector" >
         <argument
             android:name="idCollector"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/musicianFragment"
+        android:name="com.miso.musica.ui.MusicianFragment"
+        android:label="fragment_musician"
+        tools:layout="@layout/fragment_musician" >
+        <action
+            android:id="@+id/action_musicianFragment_to_musicianDetailFragment"
+            app:destination="@id/musicianDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/musicianDetailFragment"
+        android:name="com.miso.musica.ui.MusicianDetailFragment"
+        android:label="fragment_musician_detail"
+        tools:layout="@layout/fragment_musician_detail" >
+        <argument
+            android:name="idMusician"
             app:argType="integer" />
     </fragment>
 </navigation>
