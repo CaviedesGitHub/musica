@@ -98,12 +98,30 @@ class NetworkServiceAdapter constructor(context: Context) {
                     val listAlbums = mutableListOf<Album>()
                     val lstAlbums=item.getJSONArray("albums")
                     for (j in 0 until lstAlbums.length()) {
-                        val itemAlbum = lstAlbums.getJSONObject(i)
+                        val itemAlbum = lstAlbums.getJSONObject(j)
                         listAlbums.add(j, Album(albumId = itemAlbum.getInt("id"),name = itemAlbum.getString("name"), cover = itemAlbum.getString("cover"), recordLabel = itemAlbum.getString("recordLabel"), releaseDate = itemAlbum.getString("releaseDate"), genre = itemAlbum.getString("genre"), description = itemAlbum.getString("description")))
                     }
                     list.add(Musician(musicianId = item.getInt("id"), name = item.getString("name"), image = item.getString("image"), description = item.getString("description"), birthDate = item.getString("birthDate"), albums = listAlbums)) //se agrega a medida que se procesa la respuesta
                 }
                 cont.resume(list)
+            },
+            {
+                cont.resumeWithException(it)
+            }))
+    }
+
+    suspend fun getMusician(musicianId: Int) = suspendCoroutine<Musician>{ cont->
+        requestQueue.add(getRequest("musicians/$musicianId",
+            { response ->
+                val resp=JSONObject(response)
+                val listAlbums = mutableListOf<Album>()
+                val lstAlbums=resp.getJSONArray("albums")
+                for (j in 0 until lstAlbums.length()) {
+                    val itemAlbum = lstAlbums.getJSONObject(j)
+                    listAlbums.add(j, Album(albumId = itemAlbum.getInt("id"),name = itemAlbum.getString("name"), cover = itemAlbum.getString("cover"), recordLabel = itemAlbum.getString("recordLabel"), releaseDate = itemAlbum.getString("releaseDate"), genre = itemAlbum.getString("genre"), description = itemAlbum.getString("description")))
+                }
+                val musician=Musician(musicianId = resp.getInt("id"), name = resp.getString("name"), image = resp.getString("image"), description = resp.getString("description"), birthDate = resp.getString("birthDate"), albums = listAlbums)
+                cont.resume(musician)
             },
             {
                 cont.resumeWithException(it)
